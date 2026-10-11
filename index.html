@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AndesRPA | Automatización de Procesos con Robots (RPA) | Karim Chamas</title>
+<style>
+  :root { --primary:#2563eb; --primary-dark:#1e40af; --accent:#10b981; --dark:#0f172a; --gray:#64748b; --light:#f1f5f9; --white:#ffffff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:"Segoe UI", system-ui, -apple-system, sans-serif; color:var(--dark); line-height:1.6; background:var(--white); }
+  a { color:inherit; text-decoration:none; }
+  .container { max-width:1100px; margin:0 auto; padding:0 24px; }
+  section { padding:80px 0; }
+  h1,h2,h3 { line-height:1.2; }
+  h2 { font-size:2.2rem; margin-bottom:12px; text-align:center; }
+  .subtitle { text-align:center; color:var(--gray); max-width:640px; margin:0 auto 48px; }
+  .btn { display:inline-block; padding:14px 28px; border-radius:8px; font-weight:600; transition:all .2s; border:none; cursor:pointer; font-size:1rem; text-align:center; }
+  .btn-primary { background:var(--primary); color:var(--white); }
+  .btn-primary:hover { background:var(--primary-dark); transform:translateY(-2px); }
+  .btn-outline { border:2px solid var(--white); color:var(--white); margin-left:12px; }
+  .btn-outline:hover { background:var(--white); color:var(--dark); }
+
+  /* Idioma: muestra solo el idioma activo */
+  body.lang-es .en, body.lang-en .es { display:none; }
+
+  nav { position:fixed; top:0; width:100%; background:rgba(15,23,42,.92); backdrop-filter:blur(8px); z-index:100; }
+  nav .container { display:flex; justify-content:space-between; align-items:center; height:68px; }
+  .logo { color:var(--white); font-weight:700; font-size:1.2rem; }
+  .logo span { color:var(--accent); }
+  nav ul { display:flex; gap:24px; list-style:none; align-items:center; }
+  nav ul a { color:#cbd5e1; font-size:.95rem; }
+  nav ul a:hover { color:var(--white); }
+  .lang-btn { background:none; border:1px solid #475569; color:#e2e8f0; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:.85rem; font-weight:600; }
+  .lang-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  .hero { background:linear-gradient(135deg, var(--dark) 0%, #1e3a8a 100%); color:var(--white); padding:160px 0 100px; }
+  .hero h1 { font-size:3rem; max-width:760px; margin-bottom:20px; }
+  .hero h1 span { color:var(--accent); }
+  .hero p { font-size:1.2rem; color:#cbd5e1; max-width:620px; margin-bottom:36px; }
+
+  .services-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:24px; }
+  .card { background:var(--white); border:1px solid #e2e8f0; border-radius:14px; padding:32px 26px; transition:all .25s; }
+  .card:hover { transform:translateY(-6px); box-shadow:0 16px 36px rgba(15,23,42,.1); }
+  .icon { font-size:2.2rem; margin-bottom:16px; }
+  .card h3 { font-size:1.15rem; margin-bottom:10px; }
+  .card p { color:var(--gray); font-size:.95rem; }
+
+  .alt-bg { background:var(--light); }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:24px; }
+  .step { text-align:center; padding:20px; }
+  .step-num { width:52px; height:52px; border-radius:50%; background:var(--primary); color:var(--white); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.2rem; margin:0 auto 16px; }
+  .step h3 { font-size:1.05rem; margin-bottom:8px; }
+  .step p { color:var(--gray); font-size:.92rem; }
+
+  .cases-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:28px; }
+  .case { border-radius:14px; overflow:hidden; border:1px solid #e2e8f0; background:var(--white); }
+  .case-header { background:linear-gradient(135deg, var(--primary), #3b82f6); color:var(--white); padding:22px 26px; }
+  .case-header small { opacity:.85; text-transform:uppercase; letter-spacing:1px; font-size:.75rem; }
+  .case-header h3 { font-size:1.2rem; margin-top:4px; }
+  .case-body { padding:24px 26px; }
+  .case-body p { color:var(--gray); margin-bottom:16px; font-size:.95rem; }
+  .result { display:inline-block; background:#d1fae5; color:#065f46; padding:6px 12px; border-radius:999px; font-size:.85rem; font-weight:600; }
+  .tech { margin-top:14px; font-size:.82rem; color:var(--gray); }
+
+  .video-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:28px; }
+  .video-box { position:relative; background:var(--dark); border-radius:14px; overflow:hidden; aspect-ratio:16 / 9; }
+  .video-box video { width:100%; height:100%; object-fit:cover; display:block; position:relative; z-index:1; }
+  .video-placeholder { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:.95rem; text-align:center; padding:16px; }
+  .video-caption { margin-top:12px; font-weight:600; }
+  .video-caption small { display:block; color:var(--gray); font-weight:400; font-size:.9rem; }
+
+  .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px; }
+  .plan { background:var(--white); border:1px solid #e2e8f0; border-radius:14px; padding:32px 26px; display:flex; flex-direction:column; }
+  .plan.featured { border:2px solid var(--primary); box-shadow:0 16px 36px rgba(37,99,235,.15); }
+  .plan h3 { font-size:1.2rem; }
+  .plan .price { font-size:2rem; font-weight:700; color:var(--primary); margin:12px 0 4px; }
+  .plan .price small { font-size:.9rem; color:var(--gray); font-weight:500; }
+  .plan .plan-desc { color:var(--gray); font-size:.95rem; }
+  .plan ul { list-style:none; margin:18px 0 24px; color:var(--gray); font-size:.95rem; flex:1; }
+  .plan ul li { margin-bottom:8px; }
+  .plan ul li::before { content:"✓ "; color:var(--accent); font-weight:700; }
+  .pricing-note { text-align:center; color:var(--gray); font-size:.9rem; margin-top:28px; }
+
+  .about-photo { text-align:center; margin-bottom:32px; }
+  .about-photo img { width:180px; height:180px; border-radius:50%; object-fit:cover; object-position:center 25%; border:4px solid var(--white); box-shadow:0 8px 24px rgba(15,23,42,.15); display:inline-block; }
+  .about-photo .photo-fallback { display:none; width:180px; height:180px; border-radius:50%; margin:0 auto; background:var(--primary); color:var(--white); align-items:center; justify-content:center; font-size:3rem; font-weight:700; }
+  .about { max-width:760px; margin:0 auto; text-align:center; color:#334155; font-size:1.1rem; }
+  .about p { margin-bottom:16px; }
+  .profile-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:24px; margin-top:48px; }
+  .profile-card { background:var(--white); border:1px solid #e2e8f0; border-radius:14px; padding:28px 24px; }
+  .profile-card h3 { font-size:1.1rem; margin-bottom:14px; color:var(--primary-dark); }
+  .profile-card ul { list-style:none; color:#334155; font-size:.95rem; }
+  .profile-card li { margin-bottom:12px; }
+  .profile-card li small { display:block; color:var(--gray); }
+
+  .contact { background:linear-gradient(135deg, var(--dark), #1e3a8a); color:var(--white); }
+  .contact h2 { color:var(--white); }
+  .contact .subtitle { color:#cbd5e1; }
+  form { max-width:560px; margin:0 auto; display:grid; gap:16px; }
+  input, select, textarea { width:100%; padding:14px 16px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:var(--white); font-size:1rem; font-family:inherit; }
+  input::placeholder, textarea::placeholder { color:#94a3b8; }
+  textarea { min-height:120px; resize:vertical; }
+  form .btn { width:100%; }
+  .contact-info { text-align:center; margin-top:32px; color:#cbd5e1; }
+  .contact-info a { color:var(--accent); font-weight:600; }
+
+  footer { background:#020617; color:#64748b; text-align:center; padding:28px 0; font-size:.9rem; }
+
+  @media (max-width:768px) {
+    nav ul li:not(:last-child) { display:none; }
+    .hero h1 { font-size:2.2rem; }
+    h2 { font-size:1.8rem; }
+    .btn-outline { margin:12px 0 0 0; display:inline-block; }
+  }
+</style>
+</head>
+<body class="lang-es">
+
+<nav>
+  <div class="container">
+    <div class="logo">Andes<span>RPA</span></div>
+    <ul>
+      <li><a href="#sobre-mi"><span class="es">Sobre mí</span><span class="en">About</span></a></li>
+      <li><a href="#servicios"><span class="es">Servicios</span><span class="en">Services</span></a></li>
+      <li><a href="#proceso"><span class="es">Proceso</span><span class="en">Process</span></a></li>
+      <li><a href="#casos"><span class="es">Casos</span><span class="en">Cases</span></a></li>
+      <li><a href="#videos">Videos</a></li>
+      <li><a href="#precios"><span class="es">Precios</span><span class="en">Pricing</span></a></li>
+      <li><a href="#contacto"><span class="es">Contacto</span><span class="en">Contact</span></a></li>
+      <li><button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>
+      <span class="es">Automatiza tareas repetitivas con <span>robots de software</span></span>
+      <span class="en">Automate repetitive work with <span>software robots</span></span>
+    </h1>
+    <p>
+      <span class="es">Ayudo a empresas a ahorrar horas de trabajo manual, reducir errores y liberar a su equipo para tareas que realmente aportan valor. Con 2,5 años de experiencia desarrollando robots y scrapers en entornos productivos.</span>
+      <span class="en">I help companies save hours of manual work, reduce errors and free their teams for tasks that add real value. 2.5 years of experience building robots and scrapers in production environments.</span>
+    </p>
+    <a href="#contacto" class="btn btn-primary"><span class="es">Solicitar una consultoría gratuita</span><span class="en">Request a free consultation</span></a>
+    <a href="#casos" class="btn btn-outline"><span class="es">Ver casos reales</span><span class="en">See real cases</span></a>
+  </div>
+</header>
+
+<section id="servicios">
+  <div class="container">
+    <h2><span class="es">Mis servicios</span><span class="en">My services</span></h2>
+    <p class="subtitle">
+      <span class="es">Soluciones de automatización adaptadas a la realidad de tu empresa, desde un proceso puntual hasta una estrategia completa.</span>
+      <span class="en">Automation solutions tailored to your company, from a single process to a full strategy.</span>
+    </p>
+    <div class="services-grid">
+      <div class="card">
+        <div class="icon">🤖</div>
+        <h3><span class="es">Desarrollo de bots RPA</span><span class="en">RPA bot development</span></h3>
+        <p><span class="es">Diseño y desarrollo de robots que ejecutan tareas en sistemas existentes, 24/7, sin cambiar tu infraestructura.</span><span class="en">Design and development of robots that run tasks in your existing systems, 24/7, without changing your infrastructure.</span></p>
+      </div>
+      <div class="card">
+        <div class="icon">📊</div>
+        <h3><span class="es">Automatización de Excel y reportes</span><span class="en">Excel and reporting automation</span></h3>
+        <p><span class="es">Consolidación de datos, generación automática de reportes y envío por correo sin intervención manual.</span><span class="en">Data consolidation, automatic report generation and email delivery with no manual work.</span></p>
+      </div>
+      <div class="card">
+        <div class="icon">🌐</div>
+        <h3><span class="es">Web scraping y monitoreo</span><span class="en">Web scraping and monitoring</span></h3>
+        <p><span class="es">Scripts en Python que recolectan información de portales web y alertas cuando cambian precios, stock o estados. Experiencia en scraping para el sector seguros.</span><span class="en">Python scripts that collect data from web portals and alert you when prices, stock or statuses change. Experience scraping for the insurance sector.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proceso" class="alt-bg">
+  <div class="container">
+    <h2><span class="es">¿Cómo trabajo?</span><span class="en">How I work</span></h2>
+    <p class="subtitle">
+      <span class="es">Un proceso claro, con entregas parciales y resultados medibles desde el inicio.</span>
+      <span class="en">A clear process, with partial deliveries and measurable results from the start.</span>
+    </p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3><span class="es">Diagnóstico</span><span class="en">Diagnosis</span></h3><p><span class="es">Analizo tus procesos y identifico las tareas con mayor potencial de automatización.</span><span class="en">I analyze your processes and identify the tasks with the highest automation potential.</span></p></div>
+      <div class="step"><div class="step-num">2</div><h3><span class="es">Propuesta</span><span class="en">Proposal</span></h3><p><span class="es">Defino alcance, tiempos, costos y el retorno de inversión esperado.</span><span class="en">I define scope, timelines, costs and the expected return on investment.</span></p></div>
+      <div class="step"><div class="step-num">3</div><h3><span class="es">Desarrollo</span><span class="en">Development</span></h3><p><span class="es">Construyo el robot en iteraciones cortas, validando cada avance contigo.</span><span class="en">I build the robot in short iterations, validating each step with you.</span></p></div>
+      <div class="step"><div class="step-num">4</div><h3><span class="es">Implementación</span><span class="en">Implementation</span></h3><p><span class="es">Pruebas, puesta en producción y capacitación del equipo.</span><span class="en">Testing, production rollout and team training.</span></p></div>
+      <div class="step"><div class="step-num">5</div><h3><span class="es">Soporte</span><span class="en">Support</span></h3><p><span class="es">Monitoreo, mantenimiento y mejoras continuas tras la entrega.</span><span class="en">Monitoring, maintenance and continuous improvement after delivery.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="casos">
+  <div class="container">
+    <h2><span class="es">Casos de éxito</span><span class="en">Success cases</span></h2>
+    <p class="subtitle">
+      <span class="es">Ejemplo real de automatización desarrollada en un entorno productivo.</span>
+      <span class="en">A real automation built in a production environment.</span>
+    </p>
+    <div class="cases-grid">
+      <article class="case">
+        <div class="case-header">
+          <small><span class="es">Seguros de autos</span><span class="en">Auto insurance</span></small>
+          <h3><span class="es">Scraping de cotizaciones y coberturas</span><span class="en">Quote and coverage scraping</span></h3>
+        </div>
+        <div class="case-body">
+          <p>
+            <span class="es">Robots que recolectan automáticamente precios, coberturas y condiciones desde portales de aseguradoras y comparadores, entregando los datos estructurados para análisis y monitoreo de mercado.</span>
+            <span class="en">Robots that automatically collect prices, coverages and conditions from insurer and comparison portals, delivering structured data for market analysis and monitoring.</span>
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="container">
+    <h2><span class="es">Casos en video</span><span class="en">Video cases</span></h2>
+    <p class="subtitle">
+      <span class="es">Demostraciones cortas de los robots en funcionamiento. Sin datos sensibles ni información confidencial.</span>
+      <span class="en">Short demos of the robots in action. No sensitive or confidential data.</span>
+    </p>
+    <div class="video-grid">
+      <div>
+        <div class="video-box">
+          <iframe src="https://www.youtube-nocookie.com/embed/GQviFfDqgbo" title="Caso scraping de seguros" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>
+        </div>
+        <p class="video-caption">
+          <span class="es">Scraping de cotizaciones de seguros<small>Recolección automática de precios y coberturas</small></span>
+          <span class="en">Insurance quote scraping<small>Automatic collection of prices and coverages</small></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="precios" class="alt-bg">
+  <div class="container">
+    <h2><span class="es">Precios</span><span class="en">Pricing</span></h2>
+    <p class="subtitle">
+      <span class="es">Valores referenciales en UF, más IVA. Cada proyecto se cotiza según su alcance.</span>
+      <span class="en">Reference prices in Chilean UF (plus VAT) for Chile, and approximate USD for international clients. Each project is quoted by scope.</span>
+    </p>
+    <div class="pricing-grid">
+      <div class="plan">
+        <h3><span class="es">Diagnóstico inicial</span><span class="en">Initial diagnosis</span></h3>
+        <div class="price"><span class="es">Gratis</span><span class="en">Free</span></div>
+        <p class="plan-desc"><span class="es">Una sesión para identificar qué procesos conviene automatizar.</span><span class="en">One session to identify which processes are worth automating.</span></p>
+        <ul>
+          <li><span class="es">Sesión de 60 minutos</span><span class="en">60-minute session</span></li>
+          <li><span class="es">Evaluación de procesos</span><span class="en">Process assessment</span></li>
+          <li><span class="es">Estimación preliminar de costos y retorno</span><span class="en">Preliminary cost and return estimate</span></li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary"><span class="es">Agendar diagnóstico</span><span class="en">Book a diagnosis</span></a>
+      </div>
+      <div class="plan featured">
+        <h3><span class="es">Proyecto de automatización</span><span class="en">Automation project</span></h3>
+        <div class="price">
+          <span class="es">Desde 25 UF <small>+ IVA</small></span>
+          <span class="en">From USD 1,000 <small>approx.</small></span>
+        </div>
+        <p class="plan-desc"><span class="es">Desarrollo de un robot o scraper para un proceso definido.</span><span class="en">Development of a robot or scraper for a defined process.</span></p>
+        <ul>
+          <li><span class="es">Propuesta con alcance y plazos</span><span class="en">Proposal with scope and timelines</span></li>
+          <li><span class="es">Desarrollo en iteraciones cortas</span><span class="en">Development in short iterations</span></li>
+          <li><span class="es">Pruebas y puesta en producción</span><span class="en">Testing and production rollout</span></li>
+          <li><span class="es">Documentación de entrega</span><span class="en">Handover documentation</span></li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary"><span class="es">Solicitar propuesta</span><span class="en">Request a proposal</span></a>
+      </div>
+      <div class="plan">
+        <h3><span class="es">Soporte mensual</span><span class="en">Monthly support</span></h3>
+        <div class="price">
+          <span class="es">Desde 4 UF <small>/ mes + IVA</small></span>
+          <span class="en">From USD 160 <small>/ month approx.</small></span>
+        </div>
+        <p class="plan-desc"><span class="es">Mantención y monitoreo de tus robots en producción.</span><span class="en">Maintenance and monitoring of your robots in production.</span></p>
+        <ul>
+          <li><span class="es">Monitoreo de ejecuciones</span><span class="en">Execution monitoring</span></li>
+          <li><span class="es">Corrección de incidencias</span><span class="en">Incident fixes</span></li>
+          <li><span class="es">Ajustes menores incluidos</span><span class="en">Minor adjustments included</span></li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary"><span class="es">Consultar</span><span class="en">Inquire</span></a>
+      </div>
+    </div>
+    <p class="pricing-note">
+      <span class="es">Los valores en pesos se calculan con el valor de la UF del día de emisión de la factura.</span>
+      <span class="en">USD amounts are approximate conversions of the UF rate and may vary. Final prices are confirmed in each proposal.</span>
+    </p>
+  </div>
+</section>
+
+<section id="sobre-mi" class="alt-bg">
+  <div class="container">
+    <h2><span class="es">Sobre mí</span><span class="en">About me</span></h2>
+    <p class="subtitle">
+      <span class="es">Ingeniero Civil Industrial con formación en ciencia de datos y experiencia desarrollando robots y scrapers en un entorno productivo.</span>
+      <span class="en">Industrial Engineer with a background in data science and experience building robots and scrapers in a production environment.</span>
+    </p>
+    <div class="about-photo">
+      <img src="Foto_perfil_linkedin.jpg" alt="Karim Chamas Cisternas" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <div class="photo-fallback">KC</div>
+    </div>
+    <div class="about">
+      <p>
+        <span class="es">Hace 2,5 años trabajo en Consorcio como Ingeniero de Estudio Senior, desarrollando robots que hacen en minutos lo que antes tomaba horas. Mi día a día incluye robots de pricing, scrapers en Python para recolectar información de portales web y automatizaciones de reportes en Excel.</span>
+        <span class="en">For the past 2.5 years I have worked at Consorcio as a Senior Study Engineer, building robots that do in minutes what used to take hours. My day-to-day includes pricing robots, Python scrapers that collect data from web portals, and Excel reporting automation.</span>
+      </p>
+      <p>
+        <span class="es">Creo que la tecnología debe liberar al equipo para que se concentre en el análisis y las decisiones, no en copiar y pegar datos. Por eso diseño soluciones simples, documentadas y fáciles de mantener.</span>
+        <span class="en">I believe technology should free teams to focus on analysis and decisions, not on copying and pasting data. That is why I design simple, documented and easy-to-maintain solutions.</span>
+      </p>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-card">
+        <h3><span class="es">Formación</span><span class="en">Education</span></h3>
+        <ul>
+          <li><strong><span class="es">Magíster en Ciencia de Datos</span><span class="en">Master's in Data Science</span></strong><small>PUC · 2026 – 2028 (<span class="es">en curso</span><span class="en">in progress</span>)</small></li>
+          <li><strong><span class="es">Ingeniería Civil Industrial</span><span class="en">Industrial Engineering</span></strong><small>Universidad de los Andes · 2018 – 2023</small></li>
+        </ul>
+      </div>
+      <div class="profile-card">
+        <h3><span class="es">Experiencia previa</span><span class="en">Experience</span></h3>
+        <ul>
+          <li><strong><span class="es">Ingeniero de Estudio</span><span class="en">Study Engineer</span></strong><small>Consorcio · 2024 – 2025</small></li>
+          <li><strong>Trade &amp; Marketing Intern</strong><small>Sealand – A Maersk Company · 2022</small></li>
+          <li><strong>Export Commercial</strong><small>MSC Mediterranean Shipping Company · 2022 – 2023</small></li>
+        </ul>
+      </div>
+      <div class="profile-card">
+        <h3><span class="es">Certificaciones e idiomas</span><span class="en">Certifications & languages</span></h3>
+        <ul>
+          <li><span class="es">Metodología para la ciencia de datos</span><span class="en">Methodology for Data Science</span></li>
+          <li>Advanced Open Water Scuba Diver</li>
+          <li>Seeds for the Future</li>
+          <li><span class="es">Inglés profesional (working proficiency)</span><span class="en">Spanish: native · English: professional working proficiency</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto" class="contact">
+  <div class="container">
+    <h2><span class="es">Hablemos de tu proceso</span><span class="en">Let's talk about your process</span></h2>
+    <p class="subtitle">
+      <span class="es">Cuéntame qué tarea consume más tiempo en tu equipo y te responderé con una propuesta inicial.</span>
+      <span class="en">Tell me which task takes the most time from your team and I will reply with an initial proposal.</span>
+    </p>
+    <form id="contactForm" onsubmit="return enviarMail(event)">
+      <input type="text" name="nombre" placeholder="Full name" data-ph-es="Nombre completo" data-ph-en="Full name" required>
+      <input type="email" name="email" placeholder="Email" data-ph-es="Correo electrónico" data-ph-en="Email" required>
+      <input type="text" name="empresa" placeholder="Company" data-ph-es="Empresa" data-ph-en="Company">
+      <select name="interes" required>
+        <option value="" data-es="¿Qué te interesa?" data-en="What are you interested in?">¿Qué te interesa?</option>
+        <option data-es="Desarrollo de bots RPA" data-en="RPA bot development">Desarrollo de bots RPA</option>
+        <option data-es="Automatización de Excel y reportes" data-en="Excel and reporting automation">Automatización de Excel y reportes</option>
+        <option data-es="Web scraping y monitoreo" data-en="Web scraping and monitoring">Web scraping y monitoreo</option>
+        <option data-es="Otro" data-en="Other">Otro</option>
+      </select>
+      <textarea name="proceso" placeholder="Describe brevemente el proceso que quieres automatizar" data-ph-es="Describe brevemente el proceso que quieres automatizar" data-ph-en="Briefly describe the process you want to automate"></textarea>
+      <button type="submit" class="btn btn-primary"><span class="es">Enviar solicitud</span><span class="en">Send request</span></button>
+    </form>
+    <div class="contact-info">
+      <p><span class="es">También puedes escribirme a</span><span class="en">You can also email me at</span> <a href="mailto:kfchamas@miuandes.cl">kfchamas@miuandes.cl</a></p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/karim-chamas-cisternas/" target="_blank" rel="noopener">linkedin.com/in/karim-chamas-cisternas</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2026 AndesRPA · Karim Chamas Cisternas · Santiago, Chile · <span class="es">Automatización de procesos con robots</span><span class="en">Process automation with robots</span></p>
+  </div>
+</footer>
+
+<script>
+  function toggleLang() {
+    const isEs = document.body.classList.contains('lang-es');
+    document.body.classList.remove(isEs ? 'lang-es' : 'lang-en');
+    document.body.classList.add(isEs ? 'lang-en' : 'lang-es');
+    document.documentElement.lang = isEs ? 'en' : 'es';
+    document.getElementById('langToggle').textContent = isEs ? 'ES' : 'EN';
+    document.querySelectorAll('input[data-ph-es]').forEach(el => {
+      el.placeholder = isEs ? el.dataset.phEn : el.dataset.phEs;
+    });
+    document.querySelectorAll('option[data-es]').forEach(el => {
+      el.textContent = isEs ? el.dataset.en : el.dataset.es;
+    });
+  }
+
+  function enviarMail(e) {
+    e.preventDefault();
+    const f = e.target;
+    const nombre = f.nombre.value;
+    const email = f.email.value;
+    const empresa = f.empresa.value || '-';
+    const interes = f.interes.options[f.interes.selectedIndex].text;
+    const proceso = f.proceso.value;
+    const cuerpo = 'Nombre: ' + nombre + '\nCorreo: ' + email + '\nEmpresa: ' + empresa + '\nInterés: ' + interes + '\n\nProceso:\n' + proceso;
+    const asunto = 'Solicitud desde AndesRPA - ' + nombre;
+    window.location.href = 'mailto:kfchamas@miuandes.cl?subject=' + encodeURIComponent(asunto) + '&body=' + encodeURIComponent(cuerpo);
+    return false;
+  }
+</script>
+</body>
+</html>
