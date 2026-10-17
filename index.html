@@ -44,6 +44,55 @@
   .btn-outline { border:2px solid var(--white); color:var(--white); margin-left:12px; }
   .btn-outline:hover { background:var(--white); color:var(--dark); }
 
+  /* Robot animado del hero */
+  .hero-robot { width:150px; margin:0 0 28px; animation:robotIn 1.2s ease-out both; }
+  .hero-robot .bob { animation:bob 2.4s ease-in-out infinite; }
+  .hero-robot .antenna-ball { animation:pulse 1.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  .hero-robot .eye { transform-box:fill-box; transform-origin:center; animation:blink 4s infinite; }
+  .hero-robot .arm { transform-box:fill-box; transform-origin:top center; animation:none; }
+  .hero-robot { cursor:pointer; position:relative; }
+  .hero-robot.shake { animation:shake .4s linear infinite; }
+  @keyframes shake { 0%{transform:translate(0,0) rotate(0);} 25%{transform:translate(-4px,2px) rotate(-3deg);} 50%{transform:translate(4px,-2px) rotate(3deg);} 75%{transform:translate(-3px,-1px) rotate(-2deg);} 100%{transform:translate(0,0) rotate(0);} }
+  .hero-robot.gone > svg { visibility:hidden; }
+  .hero-robot.back { animation:robotIn .6s ease-out both; }
+  .boom-p { position:absolute; left:50%; top:50%; width:12px; height:12px; border-radius:3px; pointer-events:none; animation:fly .9s ease-out forwards; }
+  @keyframes fly { to { transform:translate(var(--x), var(--y)) rotate(360deg); opacity:0; } }
+  .hero-robot:hover .arm { animation:hello .5s ease-in-out infinite; }
+  .hero-robot:hover .bob { animation-duration:.7s; }
+  .hero-robot:hover .antenna-ball { animation-duration:.4s; }
+  @keyframes robotIn { from { opacity:0; transform:translateX(-80px); } to { opacity:1; transform:none; } }
+  @keyframes bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(1.3); } }
+  @keyframes blink { 0%,92%,100% { transform:scaleY(1); } 95% { transform:scaleY(.1); } }
+  @keyframes wave { 0%,100% { transform:rotate(0deg); } 50% { transform:rotate(25deg); } }
+  @keyframes hello { 0%,100% { transform:rotate(0deg); } 50% { transform:rotate(-40deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-robot, .hero-robot * { animation:none !important; }
+  }
+
+  /* Robot que se mueve con el scroll */
+  .mini-robot { position:fixed; bottom:16px; left:0; width:64px; z-index:90; pointer-events:auto; cursor:pointer; will-change:transform; }
+  .mini-robot svg { width:64px; height:auto; display:block; }
+  .mini-robot:hover .arm { animation:hello .5s ease-in-out infinite; }
+  .mini-robot.shake svg { animation:shake .4s linear infinite; }
+  .mini-robot.gone svg { visibility:hidden; }
+  .mini-robot.back svg { animation:miniBack .6s ease-out both; }
+  @keyframes miniBack { from { opacity:0; transform:scale(.3); } to { opacity:1; transform:none; } }
+  .mini-robot .bob { animation:bob 2.4s ease-in-out infinite; }
+  .mini-robot .antenna-ball { animation:pulse 1.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  .mini-robot .arm { transform-box:fill-box; transform-origin:top center; animation:wave 1.6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .mini-robot .bob, .mini-robot .antenna-ball, .mini-robot .arm { animation:none !important; }
+  }
+
+  /* Animación al hacer scroll */
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity:1; transform:none; transition:none; }
+    html { scroll-behavior:auto; }
+  }
+
   /* Idioma: muestra solo el idioma activo */
   body.lang-es .en, body.lang-en .es { display:none; }
 
@@ -158,6 +207,25 @@
 
 <header class="hero">
   <div class="container">
+    <div class="hero-robot" aria-hidden="true">
+      <svg viewBox="0 0 200 220" width="150" height="165">
+        <g class="bob">
+          <line x1="100" y1="30" x2="100" y2="14" stroke="#10b981" stroke-width="4"/>
+          <circle class="antenna-ball" cx="100" cy="10" r="7" fill="#10b981"/>
+          <rect x="50" y="30" width="100" height="80" rx="16" fill="#e2e8f0"/>
+          <circle class="eye" cx="80" cy="68" r="10" fill="#2563eb"/>
+          <circle class="eye" cx="120" cy="68" r="10" fill="#2563eb"/>
+          <rect x="78" y="90" width="44" height="8" rx="4" fill="#0f172a"/>
+          <rect x="90" y="110" width="20" height="10" fill="#94a3b8"/>
+          <rect x="60" y="120" width="80" height="70" rx="12" fill="#2563eb"/>
+          <circle cx="100" cy="150" r="8" fill="#10b981"/>
+          <rect x="40" y="125" width="16" height="50" rx="8" fill="#1e40af"/>
+          <rect class="arm" x="144" y="125" width="16" height="50" rx="8" fill="#1e40af"/>
+          <rect x="75" y="190" width="18" height="24" rx="6" fill="#334155"/>
+          <rect x="107" y="190" width="18" height="24" rx="6" fill="#334155"/>
+        </g>
+      </svg>
+    </div>
     <h1>
       <span class="es">Automatiza tareas repetitivas con <span>robots de software</span></span>
       <span class="en">Automate repetitive work with <span>software robots</span></span>
@@ -267,7 +335,7 @@
       </div>
       <div>
         <div class="video-box">
-          <iframe src="https://www.youtube-nocookie.com/embed/RgOptKG-cIY" title="Caso scraping portal Santander seguros de autos" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/pT0fDN4uYXo" title="Caso scraping portal Santander seguros de autos" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>
         </div>
         <p class="video-caption">
           <span class="es">Scraping portal Santander: seguros de autos<small>Recolección automática de cotizaciones y coberturas</small></span>
@@ -412,6 +480,25 @@
   </div>
 </section>
 
+<div class="mini-robot" id="miniRobot" aria-hidden="true">
+  <svg viewBox="0 0 200 220">
+    <g class="bob">
+      <line x1="100" y1="30" x2="100" y2="14" stroke="#10b981" stroke-width="4"/>
+      <circle class="antenna-ball" cx="100" cy="10" r="7" fill="#10b981"/>
+      <rect x="50" y="30" width="100" height="80" rx="16" fill="#e2e8f0"/>
+      <circle cx="80" cy="68" r="10" fill="#2563eb"/>
+      <circle cx="120" cy="68" r="10" fill="#2563eb"/>
+      <rect x="78" y="90" width="44" height="8" rx="4" fill="#0f172a"/>
+      <rect x="60" y="120" width="80" height="70" rx="12" fill="#2563eb"/>
+      <circle cx="100" cy="150" r="8" fill="#10b981"/>
+      <rect x="40" y="125" width="16" height="50" rx="8" fill="#1e40af"/>
+      <rect class="arm" x="144" y="125" width="16" height="50" rx="8" fill="#1e40af"/>
+      <rect x="75" y="190" width="18" height="24" rx="6" fill="#334155"/>
+      <rect x="107" y="190" width="18" height="24" rx="6" fill="#334155"/>
+    </g>
+  </svg>
+</div>
+
 <footer>
   <div class="container">
     <p>© 2026 AndesRPA · Karim Chamas Cisternas · Santiago, Chile · <span class="es">Automatización de procesos con robots</span><span class="en">Process automation with robots</span></p>
@@ -446,6 +533,110 @@
     window.location.href = 'mailto:kfchamas@miuandes.cl?subject=' + encodeURIComponent(asunto) + '&body=' + encodeURIComponent(cuerpo);
     return false;
   }
+
+  // Robot que avanza según el scroll
+  (function () {
+    const r = document.getElementById('miniRobot');
+    if (!r || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    function actualizar() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? window.scrollY / max : 0;
+      const x = p * (window.innerWidth - 90);
+      const giro = Math.sin(p * Math.PI * 8) * 8;
+      r.style.transform = 'translateX(' + x + 'px) rotate(' + giro + 'deg)';
+    }
+    window.addEventListener('scroll', actualizar, { passive: true });
+    window.addEventListener('resize', actualizar);
+    actualizar();
+  })();
+
+  // Robot del inicio: si el mouse queda encima 2 segundos, explota
+  (function () {
+    const h = document.querySelector('.hero-robot');
+    if (!h || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let t1, t2, t3;
+    h.addEventListener('mouseenter', () => { t1 = setTimeout(explotar, 2000); });
+    h.addEventListener('mouseleave', () => { clearTimeout(t1); });
+    function explotar() {
+      h.classList.add('shake');
+      t2 = setTimeout(() => {
+        h.classList.remove('shake');
+        h.classList.add('gone');
+        const colores = ['#2563eb', '#10b981', '#e2e8f0', '#1e40af'];
+        for (let i = 0; i < 16; i++) {
+          const p = document.createElement('span');
+          p.className = 'boom-p';
+          const a = Math.random() * Math.PI * 2;
+          const d = 80 + Math.random() * 120;
+          p.style.setProperty('--x', Math.cos(a) * d + 'px');
+          p.style.setProperty('--y', Math.sin(a) * d + 'px');
+          p.style.background = colores[i % colores.length];
+          h.appendChild(p);
+        }
+        t3 = setTimeout(() => {
+          h.querySelectorAll('.boom-p').forEach(p => p.remove());
+          h.classList.remove('gone');
+          h.classList.add('back');
+          setTimeout(() => h.classList.remove('back'), 700);
+        }, 2000);
+      }, 500);
+    }
+  })();
+
+  // Robot de abajo: si el mouse queda encima 2 segundos, explota
+  (function () {
+    const m = document.getElementById('miniRobot');
+    if (!m || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let t1, t2, t3;
+    m.addEventListener('mouseenter', () => { t1 = setTimeout(explotar, 2000); });
+    m.addEventListener('mouseleave', () => { clearTimeout(t1); });
+    function explotar() {
+      m.classList.add('shake');
+      t2 = setTimeout(() => {
+        m.classList.remove('shake');
+        m.classList.add('gone');
+        const colores = ['#2563eb', '#10b981', '#e2e8f0', '#1e40af'];
+        for (let i = 0; i < 14; i++) {
+          const p = document.createElement('span');
+          p.className = 'boom-p';
+          p.style.width = '7px';
+          p.style.height = '7px';
+          const a = Math.random() * Math.PI * 2;
+          const d = 60 + Math.random() * 90;
+          p.style.setProperty('--x', Math.cos(a) * d + 'px');
+          p.style.setProperty('--y', Math.sin(a) * d + 'px');
+          p.style.background = colores[i % colores.length];
+          m.appendChild(p);
+        }
+        t3 = setTimeout(() => {
+          m.querySelectorAll('.boom-p').forEach(p => p.remove());
+          m.classList.remove('gone');
+          m.classList.add('back');
+          setTimeout(() => m.classList.remove('back'), 700);
+        }, 2000);
+      }, 500);
+    }
+  })();
+
+  // Animación de entrada al hacer scroll
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    const selector = '.card, .step, .case, .video-box, .plan, .profile-card, .about-photo, .about, .pricing-note';
+    const elementos = document.querySelectorAll(selector);
+    elementos.forEach((el, i) => {
+      el.classList.add('reveal');
+      el.style.transitionDelay = ((i % 3) * 0.1) + 's';
+    });
+    const observer = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (entrada.isIntersecting) {
+          entrada.target.classList.add('visible');
+          observer.unobserve(entrada.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    elementos.forEach((el) => observer.observe(el));
+  })();
 </script>
 </body>
 </html>
